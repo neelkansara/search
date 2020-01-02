@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { NgOptionHighlightModule } from "@ng-select/ng-option-highlight";
 import { CommonModule } from "@angular/common";
@@ -16,7 +15,6 @@ import { FormsModule } from "@angular/forms";
     AppRoutingModule,
     CommonModule,
     FormsModule,
-    NgMultiSelectDropDownModule.forRoot(),
     NgSelectModule,
     NgOptionHighlightModule
   ],

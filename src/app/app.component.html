@@ -11,9 +11,14 @@
               <div class="columnname">
                 {{ wherefilter.columnname }}
               </div>
-              <div class="value">
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeFilter(wherefilter.columnname)"
+              >
+                <span class="fa fa-close"></span>
                 {{ wherefilter.values.join(",") }}
-              </div>
+              </button>
             </div>
           </div>
           <input
@@ -32,19 +37,11 @@
               bindLabel="name"
               [closeOnSelect]="true"
               bindValue="id"
+              placeholder="Select Column"
               (change)="onColumnSelect($event)"
               (close)="oncloseColumn($event)"
             >
             </ng-select>
-            <!-- <ng-multiselect-dropdown
-              #ddlColumn
-              name="column"
-              [placeholder]="'Select column'"
-              [data]="columnsDataSource"
-              [settings]="dropdownSettingsColumn"
-              (onSelect)="onColumnSelect($event)"
-            >
-            </ng-multiselect-dropdown> -->
           </div>
           <div *ngIf="isNeedToRenderSelectData" class="dropdown">
             <ng-select
@@ -54,6 +51,7 @@
               bindLabel="name"
               [closeOnSelect]="false"
               bindValue="id"
+              [placeholder]="placeholder"
               (close)="oncloseData($event)"
             >
               <ng-template
@@ -70,39 +68,14 @@
                 {{ item.name }}
               </ng-template>
             </ng-select>
-            <!-- <ng-multiselect-dropdown
-              #ddlColumnData
-              name="dataSource"
-              [placeholder]="'Select'"
-              [data]="columndata"
-              [settings]="dropdownSettingsColumnData"
-              (onSelect)="onSelectDataFilter($event)"
-            >
-            </ng-multiselect-dropdown> -->
           </div>
-          <!-- <input
-            type="text"
-            class="form-control"
-            placeholder="Search"
-            id="inputGroup"
-            (focus)="onSearchBoxFocus()"
-          /> -->
         </div>
       </div>
     </div>
     <div *ngIf="whereFilters.length > 0" class="col-md-12 text-right">
-      <a href="javascript:void()" (click)="clearFilter()">Clear Filter</a>
+      <a href="javascript:void()" (click)="clearFilter()">Clear All Filters</a>
     </div>
   </div>
-
-  <!-- <select id="columns">
-    <option
-      *ngFor="let column of columns; let i = index"
-      [value]="columns[i].id"
-    >
-      {{ columns[i].name }}
-    </option>
-  </select> -->
   <table class="table">
     <thead>
       <tr>

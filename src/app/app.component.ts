@@ -2,7 +2,6 @@ import { Component, ViewChild } from "@angular/core";
 import { Person } from "src/models/person";
 import { Persons } from "./data/dummy";
 import { PersonService } from "./services/person.service";
-import { MultiSelectComponent } from "ng-multiselect-dropdown";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { WhereFilter } from "src/models/wherefilter";
 
@@ -12,13 +11,11 @@ import { WhereFilter } from "src/models/wherefilter";
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
-  title = "search";
+  placeholder = "Select ";
   persons: Person[];
   dataSource: any[] = [];
   whereFilters: WhereFilter[] = [];
   currentWhereFilter: WhereFilter = null;
-  // dropdownSettingsColumn: any = {};
-  // dropdownSettingsColumnData: any = {};
   isNeedToRenderSelectData: boolean = false;
   isNeedToRenderSelectColumn: boolean = false;
   columns: any = [
@@ -29,10 +26,6 @@ export class AppComponent {
     { id: "city", name: "City" }
   ];
   columnsDataSource: any[] = [];
-  // selectedColumns: string[] = [];
-  // @ViewChild("ddlColumn", { static: false }) ddlColumn: MultiSelectComponent;
-  // @ViewChild("ddlColumnData", { static: false })
-  // ddlColumnData: MultiSelectComponent;
   @ViewChild("ngSelectColumn", { static: false })
   ngSelectColumn: NgSelectComponent;
   @ViewChild("ngSelectData", { static: false })
@@ -42,24 +35,6 @@ export class AppComponent {
   }
   ngOnInit() {
     this.columnsDataSource = [...this.columns];
-    // this.dropdownSettingsColumn = {
-    //   singleSelection: true,
-    //   idField: "id",
-    //   textField: "name",
-    //   selectAllText: "Select All",
-    //   unSelectAllText: "UnSelect All",
-    //   itemsShowLimit: 3,
-    //   allowSearchFilter: false
-    // };
-    // this.dropdownSettingsColumnData = {
-    //   singleSelection: false,
-    //   idField: "id",
-    //   textField: "name",
-    //   selectAllText: "Select All",
-    //   unSelectAllText: "UnSelect All",
-    //   itemsShowLimit: 3,
-    //   allowSearchFilter: false
-    // };
   }
   onColumnSelect(item: any) {
     // this.ddlColumn.closeDropdown();
@@ -68,6 +43,7 @@ export class AppComponent {
     this.ngSelectColumn.items;
     this.currentWhereFilter = new WhereFilter();
     this.currentWhereFilter.columnname = item.id;
+    this.placeholder = "Select " + item.name;
     let columnData: any[] = [];
     this.persons.map(person => {
       if (
@@ -87,7 +63,6 @@ export class AppComponent {
     );
     if (index > -1) {
       this.columnsDataSource.splice(index, 1);
-      //this.ngSelectColumn.items.splice(index, 1);
     }
     setTimeout(() => {
       this.ngSelectData.open();
@@ -123,5 +98,17 @@ export class AppComponent {
     this.whereFilters = [];
     this.columnsDataSource = [...this.columns];
     this.persons = this.personsService.getAllPerson();
+  }
+  removeFilter(columnName: string) {
+    let index = this.whereFilters.findIndex(
+      filter => filter.columnname === columnName
+    );
+    if (index > -1) {
+      this.whereFilters.splice(index, 1);
+      this.columnsDataSource = this.columns.filter(c =>
+        this.whereFilters.findIndex(f => f.columnname === c.id)
+      );
+      this.persons = this.personsService.getFilteredPeson(this.whereFilters);
+    }
   }
 }
