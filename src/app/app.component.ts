@@ -1,6 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { Person } from "src/models/person";
-import { Persons } from "./data/dummy";
+import { Person } from "../models/person";
 import { PersonService } from "./services/person.service";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { WhereFilter } from "src/models/wherefilter";
@@ -105,9 +104,18 @@ export class AppComponent {
     );
     if (index > -1) {
       this.whereFilters.splice(index, 1);
-      this.columnsDataSource = this.columns.filter(c =>
-        this.whereFilters.findIndex(f => f.columnname === c.id)
-      );
+      this.columnsDataSource = [];
+      this.columns.forEach(c => {
+        let isColumnFiltered = false;
+        this.whereFilters.forEach(f => {
+          if (c.id === f.columnname) {
+            isColumnFiltered = true;
+          }
+        });
+        if (!isColumnFiltered) {
+          this.columnsDataSource.push(c);
+        }
+      });
       this.persons = this.personsService.getFilteredPeson(this.whereFilters);
     }
   }
